@@ -57,12 +57,34 @@ object Memory {
     )
 }
 
+/** Handles Postgis Workspaces. */
 object Postgis {
   val factory = new gt.data.postgis.PostgisNGDataStoreFactory
   val create: (java.util.HashMap[_,_]) => gt.data.DataStore = 
     factory.createDataStore
 
-  def apply(params: (String,java.io.Serializable)*) = { 
+  /** Connect to a Postgis database and setup a Workspace
+    *
+    * @param params The list of Postgis connection parameters:
+    *  - "host" the database's hostname (default: "localhost")
+    *  - "port" the database's port (default: "5432")
+    *  - "user" the database's user (default: "postgres")
+    *  - "passwd" the database's password (default: none)
+    *  - "charset" the database's charset (default: "utf-8")
+    *  - "schema" the database's schema to use (default: "public")
+    * @return a Workspace
+    *
+    * Usage example:
+    * {{{
+    * Postgis(
+    *   "host"   -> "db.example.com",
+    *   "user"   -> "me",
+    *   "passwd" -> "mypassword", 
+    *   "schema" -> "geo"
+    * )
+    * }}}
+    */
+  def apply(params: (String,java.io.Serializable)*): Workspace = { 
     val connection = new java.util.HashMap[String,java.io.Serializable] 
     connection.put("port", "5432")
     connection.put("host", "localhost")
@@ -74,7 +96,46 @@ object Postgis {
       connection.put(key,value)           
     }
     new Workspace(create(connection), connection)
- } 
+  } 
+
+  /** Connect to a Postgis database and setup a Workspace
+    *
+    * @param host the database's hostname (default: "localhost")
+    * @param port the database's port (default: "5432")
+    * @param user the database's user (default: "postgres")
+    * @param passwd the database's password (default: none)
+    * @param charset the database's charset (default: "utf-8")
+    * @param schema the database's schema to use (default: "public")
+    * @return a Workspace
+    *
+    * Usage example:
+    * {{{
+    * Postgis(
+    *   host    = "db.example.com",
+    *   port    = 2345,
+    *   user    = "me",
+    *   passwd  = "mypassword", 
+    *   schema  = "geo"
+    * )
+    * }}}
+    */
+  def apply(
+    host: String = "localhost",
+    port: Int = 5432,
+    user: String = "postgres",
+    passwd: String = "",
+    charset: String = "utf-8",
+    schema: String = "public"
+  ): Workspace = {
+    this.apply(
+      "host" -> host,
+      "port" -> port.toString,
+      "user" -> user,
+      "passwd" -> passwd,
+      "charset" -> charset,
+      "schema" -> schema
+    )
+  }
 }
 
 object SpatiaLite {
