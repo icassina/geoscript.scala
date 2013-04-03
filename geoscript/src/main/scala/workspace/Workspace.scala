@@ -59,6 +59,23 @@ package workspace {
    } 
   }
 
+  object Mongo {
+    val factory = new gt.data.mongodb.MongoDataStoreFactory
+    val create: (java.util.HashMap[String,java.io.Serializable]) => gt.data.DataStore =
+      factory.createDataStore
+    
+    def apply(params: (String,java.io.Serializable)*) = {
+      val connection = new java.util.HashMap[String,java.io.Serializable]
+      connection.put("mongo_host", "localhost")
+      connection.put("mongo_port", "27017")
+      connection.put("mongo_db_name", "db")
+      for ((key,value) <- params) {
+        connection.put(key, value)
+      }
+      create(connection)
+    }
+  }
+
   object SpatiaLite {
     val factory = new gt.data.spatialite.SpatiaLiteDataStoreFactory 
     private val create: (java.util.HashMap[_,_]) => gt.data.DataStore =
