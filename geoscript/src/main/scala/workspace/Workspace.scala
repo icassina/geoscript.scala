@@ -83,7 +83,7 @@ package workspace {
     def apply(path: File): Workspace = {
       val params = new java.util.HashMap[String, java.io.Serializable]
       params.put("url", path.toURI.toURL)
-      factory.createDataStore(params: java.util.Map[_, _])
+      factory.createDataStore(params)
     }
   }
 }
