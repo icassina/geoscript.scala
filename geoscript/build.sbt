@@ -1,9 +1,5 @@
 name := "geoscript"
 
-libraryDependencies <+= scalaVersion { v =>
-  "org.scala-lang" % "scala-swing" % v 
-}
-
 libraryDependencies <++= gtVersion { v => 
   Seq(
     "org.geotools" % "gt-main" % v,
