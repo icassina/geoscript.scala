@@ -8,8 +8,8 @@ object GeoScript extends Build {
     Seq[Setting[_]](
       organization := "org.geoscript",
       version := "0.8.2",
-      gtVersion := "9.3",
-      scalaVersion := "2.10.0", 
+      gtVersion := "12-RC1",
+      scalaVersion := "2.11.2",
       scalacOptions ++= Seq("-feature", "-deprecation", "-Xlint", "-unchecked"),
       javacOptions ++= Seq("-source", "6"),
       publishTo := Some(Resolver.file("file", file("release")))
@@ -43,7 +43,7 @@ object GeoScript extends Build {
   lazy val examples = 
     Project("examples", file("examples"), settings = common ++ Seq(fork in test := false, publish := false)) dependsOn(library)
   lazy val library =
-    Project("library", file("geoscript"), settings = sphinxSettings ++ common) dependsOn(css)
+    Project("library", file("geoscript"), settings = sphinxSettings ++ common)
 
   lazy val sphinx = 
     TaskKey[java.io.File]("sphinx", "runs sphinx documentation generator")
