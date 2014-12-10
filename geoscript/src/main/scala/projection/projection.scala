@@ -99,6 +99,16 @@ package object projection {
     def id: String = CRS.toSRS(crs)
 
     /**
+     * Get the SRID as integer
+     */
+    def srid: Option[Int] =
+      try
+        Some(CRS.lookupEpsgCode(crs, true))
+      catch {
+        case (_: org.opengis.referencing.FactoryException) => None
+      }
+
+    /**
      * Get the Well Known Text specification of this projection.
      * 
      * @see http://en.wikipedia.org/wiki/Well-known_text
