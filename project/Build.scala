@@ -1,21 +1,21 @@
 import sbt._, Keys._, Defaults.defaultSettings
 
 object GeoScript extends Build {
-  lazy val gtVersion = 
+  lazy val gtVersion =
     SettingKey[String]("gt-version", "Version number for GeoTools modules")
 
   val meta =
     Seq[Setting[_]](
       organization := "org.geoscript",
-      version := "0.8.2-bare",
-      gtVersion := "13-SNAPSHOT",
+      version := "0.8.3-bestmile",
+      gtVersion := "12-RC1",
       scalaVersion := "2.11.4",
       scalacOptions ++= Seq("-feature", "-deprecation", "-Xlint", "-unchecked"),
       javacOptions ++= Seq("-source", "6"),
       publishTo := Some(Resolver.file("file", file("release")))
     )
 
-  val common = 
+  val common =
     Seq[Setting[_]](
       fork := true,
       resolvers ++= Seq(
@@ -38,16 +38,16 @@ object GeoScript extends Build {
 
   lazy val root =
     Project("root", file("."), settings = common ++ Seq(fork in test := false, publish := false)) aggregate(css, examples, library)
-  lazy val css = 
+  lazy val css =
     Project("css", file("geocss"), settings = common)
-  lazy val examples = 
+  lazy val examples =
     Project("examples", file("examples"), settings = common ++ Seq(fork in test := false, publish := false)) dependsOn(library)
   lazy val library =
     Project("library", file("geoscript"), settings = sphinxSettings ++ common)
 
-  lazy val sphinx = 
+  lazy val sphinx =
     TaskKey[java.io.File]("sphinx", "runs sphinx documentation generator")
-  lazy val sphinxBuild = 
+  lazy val sphinxBuild =
     SettingKey[String]("sphinx-build", "command to use when building sphinx")
   lazy val sphinxOpts =
     SettingKey[Seq[String]]("sphinx-opts", "options to pass to sphinx-build script")
@@ -57,7 +57,7 @@ object GeoScript extends Build {
     SettingKey[java.io.File]("sphinx-dir", "output directory for sphinx docs")
 
   def runSphinx(script: String, input: java.io.File, output: java.io.File, opts: Seq[String]) = {
-    val cmd = Seq(script) ++ opts ++ Seq("-b", "html", "-d", 
+    val cmd = Seq(script) ++ opts ++ Seq("-b", "html", "-d",
       (output / "doctrees").getAbsolutePath,
       input.getAbsolutePath,
       (output / "html").getAbsolutePath)
